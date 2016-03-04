@@ -19,3 +19,7 @@ hs_err_pid*
 .project
 .settings/
 test-output/
+
+# logs
+logs/
+*.log
