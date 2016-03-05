@@ -73,9 +73,29 @@
                                 <property name="test-gen.log.path" location="${basedir}/logs" />
                                 <property name="test-gen.test.path" location="${project.build.directory}/classes" />
 
+                                <!-- jars application specific libraries to simplify launching -->
+                                <property name="lib.path" location="${basedir}/lib" />
+
+                                <manifestclasspath property="jar.classpath"
+                                    jarfile="${lib.path}/app-bundle.jar">
+                                    <classpath>
+                                        <fileset dir="${lib.path}/">
+                                            <include name="*.jar" />
+                                            <exclude name="app-bundle.jar" />
+                                        </fileset>
+                                    </classpath>
+                                </manifestclasspath>
+                                
+                                <jar destfile="${lib.path}/app-bundle.jar" update="true">
+                                    <manifest>
+                                        <attribute name="Class-Path" value="${jar.classpath}" />
+                                    </manifest>
+                                </jar>
+                            
                                 <!-- prepare classpath for launching -->
                                 <path id="test-gen.classpath">
                                     <pathelement path="${runtime_classpath}" />
+                                    <pathelement path="${lib.path}/app-bundle.jar" />
                                 </path>
                                 
                                 <tstamp>
@@ -96,7 +116,7 @@
                                 <if>
                                     <isset property="test.filter" />
                                     <then>
-                                        <apply executable="java" relative="true">
+                                        <apply executable="java" dir="${lib.path}" relative="true">
                                             <sort>
                                                 <fileset dir="${test-gen.test.path}" includes="${test.filter}" />
                                             </sort>
