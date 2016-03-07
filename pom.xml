@@ -5,6 +5,10 @@
     <artifactId>testgen</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <testgen.dest.directory>${project.build.directory}/generated-resources/groovy/tests</testgen.dest.directory>
+    </properties>
+
     <build>
         <sourceDirectory>src/java</sourceDirectory>
 
@@ -17,6 +21,9 @@
             </resource>
             <resource>
                 <directory>src/conf</directory>
+            </resource>
+            <resource>
+                <directory>${testgen.dest.directory}</directory>
             </resource>
         </resources>
 
@@ -45,6 +52,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.5.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-tests</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy">
+                                    <classpath refid="maven.compile.classpath" />
+                                </taskdef>
+                                <mkdir dir="${testgen.dest.directory}" />
+                                <property name="gen.dest.directory" value="${testgen.dest.directory}" />
+                                <property name="gen.data.directory" value="${basedir}/src/generator-data" />
+                                <groovy src="${basedir}/src/groovy/generator/TestGenerator.groovy" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
