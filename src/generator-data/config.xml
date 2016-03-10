@@ -1,5 +1,7 @@
 <config>
-    <item />
-    <item />
-    <item />
+    <item desc               = "Groovy static assertions and test helper methods"
+          data-file          = "groovy-assert/groovy-assert-data.csv"
+          test-template-file = "groovy-assert/groovy-assert-test.groovy"
+          mapping-file       = "groovy-assert/groovy-assert-mapping.xml"
+          test-name          = "groovy-assert/GroovyAssertTest_$case.groovy"/>
 </config>
