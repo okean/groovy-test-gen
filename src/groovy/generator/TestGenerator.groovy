@@ -1,10 +1,15 @@
+import au.com.bytecode.opencsv.CSVReader;
+
 println "\tGENERATE TESTS ---\r\n"
 
 def generatedTotal = 0
 
+def dataDir    = "D:/Projects/groovy-test-gen/src/generator-data"
+def destDir    = "D:/Projects/groovy-test-gen/target/generated-resources/groovy/tests"
+
 // Resources paths
-def dataDir    = "${properties['gen.data.directory']}"
-def destDir    = "${properties['gen.dest.directory']}"
+//def dataDir    = "${properties['gen.data.directory']}"
+//def destDir    = "${properties['gen.dest.directory']}"
 def configPath = "${dataDir}/config.xml"
 
 // Read configuration file
@@ -15,13 +20,9 @@ config.children().each { assert it.name() == 'item' }
 
 config.item.findAll 
 {
-    def testTemplateFile        = it.'@test-template-file'
-    def dataFile                = it.'@data-file'
-    def mappingFile             = it.'@mapping-file'
-
-    def testTemplateFilePath    = dataDir + "/" + testTemplateFile
-    def dataFilePath            = dataDir + "/" + dataFile
-    def mappingFilePath         = dataDir + "/" + mappingFile
+    def testTemplateFilePath    = dataDir + "/" + it.'@test-template-file'
+    def dataFilePath            = dataDir + "/" + it.'@data-file'
+    def mappingFilePath         = dataDir + "/" + it.'@mapping-file'
 
     def testName                = it.'@test-name'
     def desc                    = it.'@desc'
@@ -58,7 +59,7 @@ config.item.findAll
             if (value == null || value.length() == 0)
                 return
 
-             // use '/' as a delimiter of values
+            // use '/' as a delimiter of values
             def values = value.split("/")
 
             // Get mapping item by alias
@@ -78,24 +79,13 @@ config.item.findAll
             
             def valuesCount = values.length
             
-             // substitute variables $v1,$v2,..,$vn-1 and $vn = $v
+            // substitute variables $v1,$v2,..,$vn-1
             valuesCount.times 
             { 
                 n ->
                 
-                def key = null
-                def v   = null
-                
-                if (n + 1 < valuesCount)
-                {
-                    key = "\$v${n + 1}"
-                    v = valuesCount >= n + 1 ? values[n] : ""
-                } 
-                else
-                {
-                    key = '$v'
-                    v = value
-                }
+                def key = "\$v${n + 1}"
+                def v   = values[n]
                 
                 if (snippet != null)
                 {
@@ -121,7 +111,7 @@ config.item.findAll
             def testNameTmp = testName.replace('$case', row[0])
 
             // Create recursive directories
-            testNameTmp = testName.replace("\\", "/")
+            testNameTmp = testNameTmp.replace("\\", "/")
             
             if (testNameTmp.contains("/"))
                 new File(destDir +"/" + testNameTmp.substring(0, testNameTmp.lastIndexOf('/'))).mkdirs()
@@ -142,5 +132,29 @@ println " -----------------------------------------------------------------\r\n"
 
 def loadDataFromCsvFile(dataFilePath)
 {
-    return [null, []]
+    def csvReader = new CSVReader(new FileReader(dataFilePath));
+    def header = null
+    def rows = []
+
+    csvReader.readAll().each
+    {
+        row ->
+        
+        if (row.size() == 0 || row.first().allWhitespace)
+            return
+
+        if (!header)
+        {
+            if (row.first() == 'case')
+            {
+                header = row
+            }
+            
+            return
+        }
+        
+        rows.add(row)
+    }
+    
+    return [header, rows]
 }

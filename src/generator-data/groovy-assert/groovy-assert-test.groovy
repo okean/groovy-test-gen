@@ -1,1 +1,5 @@
+/*
+ * Generated test.
+ */
+
 $code

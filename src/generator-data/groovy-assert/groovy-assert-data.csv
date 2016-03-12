@@ -1,0 +1,8 @@
+case,empty line,define var,assert
+01,,x/null,x/==/null
+01,,,x/!=/'abc'
+01,,,x/!=/'foo'
+01,_,x/'abc',x/!=/'foo'
+01,,,x/!=/null
+01,,,x/!=/'def'
+01,,,x/==/'abc'
