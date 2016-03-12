@@ -4,12 +4,9 @@ println "\tGENERATE TESTS ---\r\n"
 
 def generatedTotal = 0
 
-def dataDir    = "D:/Projects/groovy-test-gen/src/generator-data"
-def destDir    = "D:/Projects/groovy-test-gen/target/generated-resources/groovy/tests"
-
 // Resources paths
-//def dataDir    = "${properties['gen.data.directory']}"
-//def destDir    = "${properties['gen.dest.directory']}"
+def dataDir    = "${properties['gen.data.directory']}"
+def destDir    = "${properties['gen.dest.directory']}"
 def configPath = "${dataDir}/config.xml"
 
 // Read configuration file
