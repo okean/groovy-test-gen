@@ -1,3 +1,7 @@
+import static Common.*
+
+log "Groovy static assertions and test helper methods"
+
 def x = null
 
 assert x == null

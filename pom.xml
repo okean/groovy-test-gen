@@ -17,6 +17,9 @@
                 <directory>src/groovy/int</directory>
             </resource>
             <resource>
+                <directory>src/groovy/util</directory>
+            </resource>
+            <resource>
                 <directory>src/groovy/tests/</directory>
             </resource>
             <resource>

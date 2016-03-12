@@ -2,5 +2,5 @@
     <item alias = "define var"                      snippet = "$v1 = $v2
 	                                                           &#xA;" />
     <item alias = "assert"                          snippet = "assert $v1 $v2 $v3"/>
-	<item alias = "empty line"                      snippet = "" />
+    <item alias = "empty line"                      snippet = "" />
 </mapping>
