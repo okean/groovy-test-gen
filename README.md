@@ -1,4 +1,5 @@
 ## Groovy-test-gen
+[![Build Status](https://img.shields.io/travis/Respect/Template.svg?style=flat-square)](https://travis-ci.org/okean/groovy-test-gen)
 
 This project provides a best-practices template Groovy project which simplify designing tests in Java and Groovy languages. It lets you write core functionalities, utils and helpers in Java, hide this by a Groovy wrapper and turn it into a domain-specific language.
 
