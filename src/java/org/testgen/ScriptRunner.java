@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.io.SequenceInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -33,6 +34,7 @@ public class ScriptRunner
         {
             Binding binding = new Binding();
             binding.setVariable("succeed", Boolean.FALSE);
+            binding.setVariable("now", new Date());
             
             Reader scriptReader = new InputStreamReader(new SequenceInputStream(
                     getTestFileStream(), getTailFileStream()));
@@ -47,6 +49,8 @@ public class ScriptRunner
                 scriptDir = scriptName.substring(0, idx);
                 scriptName = scriptName.substring(idx + 1, scriptName.length());
             }
+            
+            binding.setVariable("scriptDir", scriptDir);
             
             scriptName = scriptName.replaceAll(".", "_").replaceAll("-", "_");
                         
