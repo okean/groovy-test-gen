@@ -165,7 +165,7 @@ public class ScriptRunner
 
     private InputStream getTestFileStream() throws FileNotFoundException
     {
-            return getClass().getResourceAsStream("/" + getTestFileName());
+        return getClass().getResourceAsStream("/" + getTestFileName());
     }
 
     public static void main(String[] args)
