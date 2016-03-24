@@ -1,11 +1,11 @@
-def jnlpUrl = ''
-def toDir = ''
+def jnlpUrl = "${properties['gen.jnlp.url']}"
+def libDir  = "${properties['gen.lib.dir']}"
 
 println "jnlpUrl = ${jnlpUrl}"
-println "toDir   = ${toDir}"
+println "libDir  = ${libDir}"
 
-def jnlpPath        = toDir + "/test-app.jnlp"
-def runPropertyPath = toDir + "/run.properties"
+def jnlpPath        = libDir + "/test-app.jnlp"
+def runPropertyPath = libDir + "/run.properties"
 
 getFileContent(jnlpUrl, jnlpPath)
 
@@ -48,7 +48,7 @@ jnlpConfig.resources.jar.each
         jarUrl = jarUrl + "?version-id=" + version;
     }
     
-    getFileContent(jarUrl, toDir + "/" + jar)
+    getFileContent(jarUrl, libDir + "/" + jar)
 }
 
 println "Finished successfully"

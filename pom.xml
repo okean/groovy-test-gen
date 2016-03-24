@@ -7,6 +7,7 @@
 
     <properties>
         <testgen.dest.directory>${project.build.directory}/generated-resources/groovy/tests</testgen.dest.directory>
+        <testgen.lib.directory>${basedir}/lib</testgen.lib.directory>
     </properties>
 
     <build>
@@ -59,6 +60,39 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>load-libs</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+                                    classpathref="maven.compile.classpath" />
+                                <if>
+                                    <isset property="load.jnlp" />
+                                    <then>                                        
+                                        <if>
+                                            <not>
+                                                <available file="${testgen.lib.directory}" type="dir" />
+                                            </not>
+                                            <then>
+                                                <mkdir dir="${testgen.lib.directory}" />
+                                            </then>
+                                        </if>
+                                        
+                                        <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy">
+                                            <classpath refid="maven.compile.classpath" />
+                                        </taskdef>
+                                        <property name="gen.lib.dir" value="${testgen.lib.directory}" />
+                                        <property name="gen.jnlp.url" value="${load.jnlp}" />
+                                        <groovy src="${basedir}/src/groovy/jaws/JnlpLoader.groovy" />                                        
+                                    </then>
+                                </if>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>generate-tests</id>
                         <phase>generate-resources</phase>
@@ -121,7 +155,7 @@
                                 <property name="test-gen.test.path" location="${project.build.directory}/classes" />
 
                                 <!-- jars application specific libraries to simplify launching -->
-                                <property name="lib.path" location="${basedir}/lib" />
+                                <property name="lib.path" location="${testgen.lib.directory}" />
 
                                 <manifestclasspath property="jar.classpath"
                                     jarfile="${lib.path}/app-bundle.jar">
