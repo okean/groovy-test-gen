@@ -79,9 +79,8 @@
                                             </then>
                                         </if>
                                         
-                                        <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy">
-                                            <classpath refid="maven.compile.classpath" />
-                                        </taskdef>
+                                        <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy"
+                                            classpathref="maven.compile.classpath" />
                                         <property name="gen.lib.dir" value="${testgen.lib.directory}" />
                                         <property name="gen.jnlp.url" value="${load.jnlp}" />
                                         <groovy src="${basedir}/src/groovy/jaws/JnlpLoader.groovy" />                                        
@@ -98,9 +97,8 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <tasks>
-                                <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy">
-                                    <classpath refid="maven.compile.classpath" />
-                                </taskdef>
+                                <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy"
+                                    classpathref="maven.compile.classpath" />
                                 <mkdir dir="${testgen.dest.directory}" />
                                 <property name="gen.dest.directory" value="${testgen.dest.directory}" />
                                 <property name="gen.data.directory" value="${basedir}/src/generator-data" />
@@ -126,6 +124,35 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeScope>provided</excludeScope>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
